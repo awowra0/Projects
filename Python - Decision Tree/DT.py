@@ -1,11 +1,10 @@
 import math
 
 def main(filename="test.txt", tosplit=",", dec=-1):
-    f = open(filename, "r")
-    A=[]
-    for i in f:
-        A.append(i.replace("\n","").split(tosplit))
-    f.close()
+    with open(filename, "r") as f:
+        A=[]
+        for i in f:
+            A.append(i.replace("\n","").split(tosplit))
     start = create_tree(A, dec)
     visual(start, dec, filename)
     #print(superprint(start))
@@ -16,7 +15,7 @@ def create_tree(A, dec):
 	while len(Q) > 0:
 		curr = Q[0]
 		if curr.val != 0:
-			B = findunique(curr.A)#list of lists of attributes' values
+			B = findunique(curr.A) #list of lists of attributes' values
 			E = [[j for j in curr.A if j[curr.atr] == B[curr.atr][i]] for i in range(len(B[curr.atr]))] #list of lists of objects divided by attribute
 			curr.next = [Node(E[i],dec,curr.atr,curr.depth+1) for i in range(len(E))]
 		for i in curr.next:
@@ -46,7 +45,7 @@ def visual(start, dec, filename):
 			A.insert(1,i)
 		A.pop(0)
 	try:
-		f = open("SUS-res.txt","w")
+		f = open("DT-res.txt","w")
 		f.write(text)
 		f.close()
 	except:
@@ -94,7 +93,7 @@ def findunique(A):
         for j in range(len(A[0])):
             if i[j] not in B[j]:
                 B[j].append(i[j])
-    return B#every possible attribute value
+    return B #every possible attribute value
 
 def countvars(A):
     C = [{} for i in range(len(A[0]))]
@@ -104,7 +103,7 @@ def countvars(A):
                 C[j][i[j]] = 1
             else:
                 C[j][i[j]] += 1
-    return C#count of occurences of every attribute value
+    return C #count of occurences of every attribute value
 
 def prob(A):
     C = countvars(A)
@@ -120,12 +119,12 @@ def prob(A):
 def findbestpick(A, dec=-1):
     B = findunique(A)
     C = countvars(A)
-    INFO = []#information value
+    INFO = [] #information value
     ent = [] #attributes entropy
-    ENTROPY = 0#decisive attribute entropy
+    ENTROPY = 0 #decisive attribute entropy
     temp = 0
     D = prob(A)
-    for m in D:#attributes entropy
+    for m in D: #attributes entropy
         temp = 0
         for n in m:
             temp += m[n] * math.log2(m[n])
@@ -133,12 +132,12 @@ def findbestpick(A, dec=-1):
     for n in D[dec]: #decisive attribute entropy
         ENTROPY += D[dec][n] * math.log2(D[dec][n])
     ENTROPY *= -1
-    for pp, p in enumerate(D):#pick atr, INFO
+    for pp, p in enumerate(D): #pick atr, INFO
         if pp==dec or (dec==-1 and pp==len(D)-1):
             continue
         temp = 0
         INFOT = 0
-        for r in p:#pick val from atr
+        for r in p: #pick val from atr
             S = {}
             ss = 0
             for s in A:
