@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -6,6 +5,8 @@ import java.awt.geom.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+
+
 class Ball extends Ellipse2D.Float
 {
     Board p;
@@ -158,7 +159,7 @@ class Ball extends Ellipse2D.Float
         }
     }
 
-    void nextKrok()
+    void nextStep()
     {
         if (p.bpaused==false)
         {
@@ -263,6 +264,8 @@ class Ball extends Ellipse2D.Float
                             {
                                 dx=-dx;
                             }
+                            x+=dx;
+                            y+=dy;
                         }
                         if (p.a.itype>1)//fireball effect
                         {
@@ -297,6 +300,8 @@ class Ball extends Ellipse2D.Float
         Toolkit.getDefaultToolkit().sync();
     }
 }
+
+
 class Brick extends Rectangle2D.Float
 {
     Brick(int x, int y)
@@ -307,6 +312,8 @@ class Brick extends Rectangle2D.Float
         this.y=y;
     }
 }
+
+
 class Engine extends Thread
 {
     Ball a;
@@ -374,13 +381,15 @@ class Engine extends Thread
                     a.playerbounced=1;
                     a.bfallen=0;
                 }
-                a.nextKrok();
+                a.nextStep();
                 sleep(20);
             }
         }
         catch(InterruptedException e){}
     }
 }
+
+
 class Paddle extends Rectangle2D.Float
 {
     boolean bmagnet;
@@ -398,6 +407,8 @@ class Paddle extends Rectangle2D.Float
         this.x=x;
     }
 }
+
+
 class Board extends JPanel implements MouseMotionListener, MouseListener, KeyListener
 {
     Paddle b1,b2;
@@ -447,30 +458,30 @@ class Board extends JPanel implements MouseMotionListener, MouseListener, KeyLis
         btxt = new BufferedImage[9];
         ptxt = new BufferedImage[4];
         brtxt = new BufferedImage[11];
-        String[] plik = {"bonus5.bmp","bonus6.bmp","bonus1.bmp","bonus2.bmp","bonus3.bmp","bonus4.bmp","bonus7.bmp","bonus8.bmp","bonus9.bmp"};
-        String[] plik2 = {"bpaddle60.bmp","bpaddle90.bmp","bpaddle120.bmp","bpaddle150.bmp"};
-        String[] plik3 = {"bhard.bmp","bgray3.bmp","bgray2.bmp","bgray1.bmp","bblue.bmp","bgreencyan.bmp","borangeyellow.bmp","bbluepurple.bmp","bflame1.bmp","bflame2.bmp","bflame3.bmp"};
+        String[] files = {"bonus5.bmp","bonus6.bmp","bonus1.bmp","bonus2.bmp","bonus3.bmp","bonus4.bmp","bonus7.bmp","bonus8.bmp","bonus9.bmp"};
+        String[] files2 = {"bpaddle60.bmp","bpaddle90.bmp","bpaddle120.bmp","bpaddle150.bmp"};
+        String[] files3 = {"bhard.bmp","bgray3.bmp","bgray2.bmp","bgray1.bmp","bblue.bmp","bgreencyan.bmp","borangeyellow.bmp","bbluepurple.bmp","bflame1.bmp","bflame2.bmp","bflame3.bmp"};
         for (int i=0;i<11;i++)//take textures from files
         {
             try
             {
-                File f = new File(plik3[i]);
+                File f = new File("gfx/" + files3[i]);
                 brtxt[i] = ImageIO.read(f);
                 if (i<4)
                 {
-                    f = new File(plik2[i]);
+                    f = new File("gfx/" + files2[i]);
                     ptxt[i] = ImageIO.read(f);
                 }
                 if (i<9)
                 {
-                    f = new File(plik[i]);
+                    f = new File("gfx/" + files[i]);
                     btxt[i] = ImageIO.read(f);
                 }
 
             }
             catch(IOException e)
             {
-                System.err.println("Problem z plikiem");
+                System.err.println("Failed to load gfx file.");
             }
         }
         setlevel();
@@ -684,6 +695,7 @@ class Board extends JPanel implements MouseMotionListener, MouseListener, KeyLis
     public void keyTyped(KeyEvent f) {}
 }
 
+
 public class Program
 {
     public static void main(String[] args)
@@ -715,7 +727,7 @@ public class Program
                 JFrame jf=new JFrame();
                 jf.add(p);
                 jf.setTitle("Arcanoid");
-                jf.setSize(390,405);
+                jf.setSize(405,405);
                 jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 jf.setVisible(true);
             }
