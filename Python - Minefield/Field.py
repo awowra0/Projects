@@ -280,11 +280,3 @@ class Board:
         self.frames[20][10]["text"] = "*"
         self.gamefield[0][10] = "*"
         self.__fill()
-
-
-try:
-    playground = Board()
-    # playground.tk.mainloop()
-except Exception as e:
-    print(e)
-# input("Press Enter")

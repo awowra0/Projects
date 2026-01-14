@@ -272,11 +272,3 @@ class Board:
         for j in self.mistakes:
             self.buttons[j[1]][j[0]]["bg"] = "snow"
         self.mistakes = [] 
-
-
-try:
-    playground = Board()
-    # playground.tk.mainloop()
-except Exception as e:
-    print(e)
-# input("Press Enter")
